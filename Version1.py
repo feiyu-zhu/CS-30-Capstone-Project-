@@ -1,16 +1,33 @@
 class Character:
-    def __init__(self,name, player, position, inventory):
+    
+    def __init__(self, name, player, position, inventory, map_):
         self.name = name
         self.player = player
         self.position = position
         self.inventory = inventory
+        self.map_ = map_
     
     def check_inventory(self):
         for items in self.inventory:
             print(f"-- {items} --")
 
-            
-player = Character("?", True, [0, 0], ["item1", "item2"])
+class Map_:
+    
+    def __init__(self, name, size):
+        self.name = name
+        self.size = size
+        self.map_ = [[None for _ in range(self.size[1]+1)] for _ in range(self.size[0]+1)]
+        
+    def dect_border(self, coordinate):
+        if coordinate[0] > self.size[0] or coordinate[1] > self.size[1]:
+            return True
+        elif coordinate[0] < 0 or coordinate[1] < 0:
+            return True
+        else:
+            return False
+
+starting_map = Map_("starting map", [2,2])
+player = Character("?", True, [0, 0], ["test 1", "test 2"], starting_map)
 
 
 def move():
@@ -31,19 +48,39 @@ def quit_():
 
 
 def forward():
-    pass
-
+    player.position[1] -= 1
+    if player.map_.dect_border(player.position):
+        player.position[1] += 1
+        print("You can't go there")
+    else:
+        print(player.position)
+        
 
 def backward():
-    pass
+    player.position[1] += 1
+    if player.map_.dect_border(player.position):
+        player.position[1] -= 1
+        print("You can't go there")
+    else:
+        print(player.position)
 
 
 def right():
-    pass
+    player.position[0] -= 1
+    if player.map_.dect_border(player.position):
+        player.position[0] += 1
+        print("You can't go there")
+    else:
+        print(player.position)
 
 
 def left():
-    pass
+    player.position[0] += 1
+    if player.map_.dect_border(player.position):
+        player.position[0] -= 1
+        print("You can't go there")
+    else:
+        print(player.position)
 
 
 menu = {"game": {"move": move, "search": search, "check": check, "quit": quit_},
@@ -56,11 +93,10 @@ def player_choice(type_):
         player_selection = input("My decision is ")
         if player_selection in menu[type_]:
             menu[type_][player_selection]()
+            break
         else:
             print("That is not a option")
             continue
 
-player_choice("game")
-            
-        
-        
+while True:
+    player_choice("game")
