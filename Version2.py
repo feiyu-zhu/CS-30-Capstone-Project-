@@ -1,3 +1,4 @@
+from tabulate import tabulate
 class Character:
     
     def __init__(self, name, player, position, inventory, map_):
@@ -8,6 +9,7 @@ class Character:
         self.map_ = map_
     
     def check_inventory(self):
+        print("-----Item Own-----")
         for items in self.inventory:
             print(f"-- {items} --")
 
@@ -27,7 +29,7 @@ class Map_:
             return False
 
 starting_map = Map_("starting map", [2,2])
-player = Character("?", True, [0, 0], ["test 1", "test 2"], starting_map)
+player = Character("?", True, [2, 2], ["test 1", "test 2"], starting_map)
 
 
 def move():
@@ -35,11 +37,11 @@ def move():
 
 
 def search():
-    player.check_inventory()
+    pass
 
 
 def check():
-    pass
+    player.check_inventory() 
 
 
 def quit_():
@@ -86,6 +88,14 @@ def left():
 menu = {"game": {"move": move, "search": search, "check": check, "quit": quit_},
         "move": {"forward": forward, "backward": backward, "right": right, "left": left}}
 
+
+def print_player_position():
+    copy_map = player.map_.map_
+    copy_map[player.position[1]][player.position[0]] = "H"
+    print(tabulate(player.map_.map_,tablefmt = 'grid'))
+    copy_map[player.position[1]][player.position[0]] = None
+
+
 def player_choice(type_):
     while True:
         for choice in menu[type_].keys():
@@ -93,11 +103,19 @@ def player_choice(type_):
         player_selection = input("My decision is ")
         if player_selection in menu[type_]:
             menu[type_][player_selection]()
+            print_player_position()
+            if type_ != "game":
+                continue 
+            break
+        elif player_selection == "" and type_ != "game":
             break
         else:
             print("That is not a option")
             continue
 
+
+#print(tabulate(player.map_.map_,tablefmt = 'grid'))
 while True:
+    print_player_position()
     player_choice("game")
 
