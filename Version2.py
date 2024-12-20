@@ -1,18 +1,24 @@
 from tabulate import tabulate
 class Character:
     
-    def __init__(self, name, player, position, inventory, map_):
+    def __init__(self, name, player, position, inventory, map_, state):
         self.name = name
         self.player = player
         self.position = position
         self.inventory = inventory
         self.map_ = map_
+        self.state = state
     
     def check_inventory(self):
         print("-----Item Own-----")
         for items in self.inventory:
             print(f"-- {items} --")
 
+class State:
+    def __init__(self, player, health):
+        self.player = player
+        self.health = health
+        
 class Map_:
     
     def __init__(self, name, size):
@@ -28,9 +34,22 @@ class Map_:
         else:
             return False
 
-starting_map = Map_("starting map", [2,2])
-player = Character("?", True, [2, 2], ["test 1", "test 2"], starting_map)
+class Items:
+    
+    def __init__(self, name, description, type_, value, time, rarity):
+        self.name = name
+        self.description = description
+        self.type_ = type_
+        self.value = value
+        self.time = time
+        self.rarity = rarity
 
+healing_pill = Items("healing pill", "A pill that make you health +5", "health", 5,0,10 )
+starting_map = Map_("starting map", [2,2])
+player_state = State(True,20)
+mob_state = State(False, 10)
+player = Character("?", True, [2, 2], ["test 1", "test 2"], starting_map, player_state)
+mob_1 = Character("Servant", False, [0,1], [], starting_map, mob_state)
 
 def move():
     player_choice("move")
