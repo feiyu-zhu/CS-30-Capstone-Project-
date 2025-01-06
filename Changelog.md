@@ -1,8 +1,8 @@
 Version 1
   - Creat a map class contain varrible name and size, and use list to creat a 3x3 map
   - Creat caharacter class contain varrible name(name of character), player(is the character control by player), position(position on map), inventory(a list of item the character have), and map_(which map character at)
-  - Basic function[move(use for let player choose where to move to), check inventory(print out item player own), and quit(quit the game)] 
-  -Use databases to create menu(a dictionary of dictionary call function based on player input
+  - Basic function[move(use for let player choose where to move to), check inventory(print out item player own), and quit(quit the game)]
+  - Use databases to create menu(a dictionary of dictionary call function based on player input
 
 Version 2
   - import tabulate to creat map that show where player at on the map
