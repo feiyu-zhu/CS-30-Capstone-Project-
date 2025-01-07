@@ -19,6 +19,7 @@ Version 2
 
 Version 3
   - creat move class and add varrible speed and attack in the state class
+  - move class has varrible name, description, type, value, and piority
   - add move kick, punch, guard and the move use for testing God Requiem
   - if player use search function and the player is not at point [1,1] there is 50% of chance the player will get a item and 50% encounter with enemy.
   - after player encounter with enemy start fight function
