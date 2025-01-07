@@ -16,3 +16,11 @@ Version 2
     - if the item find is a item not enemy(0 and 1 random)
     - From the item list base on rarity pick a item append to player inventory
   - when select choice if player input is empty return to the main menu
+
+Version 3
+  - if player use search function and the player is not at point [1,1] there is 50% of chance the player will get a item and 50% encounter with enemy.
+  - after player encounter with enemy start fight function
+  - player and ememy each make a move(cpu choose randomly)
+  - compare the piroity between move and the speed state of player and emey to decide who go first
+  - the fight only continue when both player and enenmy health is > than 0, if not into fight concluding
+  - if player lost player will lost all the item and revive at potint [0,0]
