@@ -18,6 +18,8 @@ Version 2
   - when select choice if player input is empty return to the main menu
 
 Version 3
+  - creat move class and add varrible speed and attack in the state class
+  - add move kick, punch, guard and the move use for testing God Requiem
   - if player use search function and the player is not at point [1,1] there is 50% of chance the player will get a item and 50% encounter with enemy.
   - after player encounter with enemy start fight function
   - player and ememy each make a move(cpu choose randomly)
