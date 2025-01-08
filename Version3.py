@@ -13,8 +13,17 @@ class Character:
     
     def check_inventory(self):
         print("-----Item Own-----")
+        list_of_item = []
         for items in self.inventory:
-            print(f"-- {items.name.title()} --")
+            if items not in list_of_item:
+                list_of_item.append(items)
+                items.number += 1
+            else:
+                items.number += 1
+        for items in list_of_item:
+            print(f"-- {items.name.title()} × {items.number} --")
+            items.number = 0
+        
         print("----Move List----")
         for items in self.move_list:
             print(f"--{items.name.title()}--")
@@ -51,6 +60,7 @@ class Items:
         self.value = value
         self.time = time
         self.rarity = rarity
+        self.number = 0
 
 class Moves:
     
@@ -63,14 +73,14 @@ class Moves:
 
 punch = Moves("punch", "Quickly punches enemy", "attack", 1, 2)
 kick = Moves("kick", "Kick Strike", "attack", 2, 1)
-guard = Moves("guard", "Guard Vent", "guard", 2, 3)
-god_requiem = Moves("god requiem", "ORA!ORA!ORA!ORA!", "attack", 999, 4)
+guard = Moves("guard", "Use defense form, guard your self from the attack", "guard", 2, 3)
+god_requiem = Moves("god requiem", "A cheat move for testing", "attack", 999, 4)
 healing_pill = Items("healing pill", "A pill that heal you for a small amount", "health", 5,0,10 )
 crazy_diamond = Items("crazy diamond", "A magical stone that restore all your state", "all", 999, 0, 1)
 starting_map = Map_("starting map", [2,2])
 player_state = State(True, 20, 20, 10, 5)
 mob_state = State(False, 10, 10, 5, 1)
-player = Character("Emyia", True, [2, 2], [], starting_map, player_state, [punch, kick, guard, god_requiem])
+player = Character("Emyia", True, [2, 2], [healing_pill,healing_pill,crazy_diamond], starting_map, player_state, [punch, kick, guard, god_requiem])
 servant = Character("Servant", False, [0,1], [], starting_map, mob_state, [punch, kick, guard])
 list_ = [healing_pill, crazy_diamond]
 def move():
@@ -226,6 +236,25 @@ def left():
         print_player_position()
 
 
+def use_item(character):
+    if character.player:
+        list_of_item = []
+        for items in character.inventory:
+            if items not in list_of_item:
+                list_of_item.append(items)
+                items.number += 1
+            else:
+                items.number += 1
+        for items in list_of_item:
+            print(f"{items.name.title()} × {items.number}")
+            items.number = 0
+        while True:
+            player_choice = input("I want to use: ")
+            
+    else:
+        pass
+
+    
 menu = {"game": {"move": move, "search": search, "check": check, "quit": quit_},
         "move": {"forward": forward, "backward": backward, "right": right, "left": left}}
 
@@ -252,7 +281,7 @@ def player_choice(type_):
         else:
             print("That is not a option")
             continue
-
+use_item(player)
 print("Hit enter to return")
 while True:
     player_choice("game")
