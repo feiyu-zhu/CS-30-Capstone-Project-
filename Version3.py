@@ -253,6 +253,6 @@ def player_choice(type_):
             print("That is not a option")
             continue
 
-
+print("Hit enter to return")
 while True:
     player_choice("game")
