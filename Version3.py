@@ -93,7 +93,7 @@ def search():
     for item in list_:
         for i in range(item.rarity):
             item_list.append(item)
-    varrible = random.randint(0,0)
+    varrible = random.randint(0,1)
     if varrible == 1:
         item = random.choice(item_list)
         player.inventory.append(item)
@@ -121,7 +121,7 @@ def player_choose_move():
         count = 0
         if player_choose == "item use" and len(player.inventory) != 0:
             choose_item(player)
-        else:
+        elif player_choose == "item use" and len(player.inventory) == 0:
             print("There are no item in your inventory")
             continue
         for choose in player.move_list:
@@ -225,9 +225,9 @@ def backward():
 
 
 def right():
-    player.position[0] -= 1
+    player.position[0] += 1
     if player.map_.dect_border(player.position):
-        player.position[0] += 1
+        player.position[0] -= 1
         print("You can't go there")
     else:
         print(player.position)
@@ -235,9 +235,9 @@ def right():
 
 
 def left():
-    player.position[0] += 1
+    player.position[0] -= 1
     if player.map_.dect_border(player.position):
-        player.position[0] -= 1
+        player.position[0] += 1
         print("You can't go there")
     else:
         print(player.position)
@@ -303,7 +303,7 @@ def use_item(character,item):
             print(f"Current health: {character.state.health}")
         else:
             print(f"Current health: {character.state.health}")
-        
+    character.inventory.remove(item)   
     
 menu = {"game": {"move": move, "search": search, "check": check, "item": choose_item,
                  "quit": quit_},
