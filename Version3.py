@@ -56,7 +56,7 @@ class Items:
     def __init__(self, name, description, type_, value, time, rarity):
         self.name = name
         self.description = description
-        self.type_ = type_
+        self.type = type_
         self.value = value
         self.time = time
         self.rarity = rarity
@@ -71,6 +71,7 @@ class Moves:
         self.value = value
         self.priority = priority
 
+item_use = Moves("item use", "use a item", "special", 0, 0)
 punch = Moves("punch", "Quickly punches enemy", "attack", 1, 2)
 kick = Moves("kick", "Kick Strike", "attack", 2, 1)
 guard = Moves("guard", "Use defense form, guard your self from the attack", "guard", 2, 3)
@@ -80,7 +81,7 @@ crazy_diamond = Items("crazy diamond", "A magical stone that restore all your st
 starting_map = Map_("starting map", [2,2])
 player_state = State(True, 20, 20, 10, 5)
 mob_state = State(False, 10, 10, 5, 1)
-player = Character("Emyia", True, [2, 2], [healing_pill,healing_pill,crazy_diamond], starting_map, player_state, [punch, kick, guard, god_requiem])
+player = Character("Emyia", True, [2, 2], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use])
 servant = Character("Servant", False, [0,1], [], starting_map, mob_state, [punch, kick, guard])
 list_ = [healing_pill, crazy_diamond]
 def move():
@@ -92,7 +93,7 @@ def search():
     for item in list_:
         for i in range(item.rarity):
             item_list.append(item)
-    varrible = random.randint(0,1)
+    varrible = random.randint(0,0)
     if varrible == 1:
         item = random.choice(item_list)
         player.inventory.append(item)
@@ -118,6 +119,11 @@ def player_choose_move():
             print(f"--- {name.description}")
         player_choose = input().lower()
         count = 0
+        if player_choose == "item use" and len(player.inventory) != 0:
+            choose_item(player)
+        else:
+            print("There are no item in your inventory")
+            continue
         for choose in player.move_list:
             count = count + 1
             if choose.name == player_choose:
@@ -187,6 +193,8 @@ def fight_calcu(first, first_move, second, second_move):
                     print(f"{first.name.upper()} current health is 0")
                 else:
                     print(f"{first.name.upper()} current health is {first.state.health}")
+
+
 def check():
     player.check_inventory() 
 
@@ -236,26 +244,69 @@ def left():
         print_player_position()
 
 
-def use_item(character):
-    if character.player:
-        list_of_item = []
-        for items in character.inventory:
-            if items not in list_of_item:
-                list_of_item.append(items)
-                items.number += 1
+def choose_item(character):
+    while True:
+        if character.player:
+            list_of_item = []
+            for items in character.inventory:
+                if items not in list_of_item:
+                    list_of_item.append(items)
+                    items.number += 1
+                else:
+                    items.number += 1
+            for items in list_of_item:
+                print(f"{items.name.title()} × {items.number}")
+                items.number = 0
+            if len(character.inventory) != 0:
+                player_choice = input("I want to use: ").lower()
+                count = 0
+                choose = None
+                for items in character.inventory:
+                    count += 1
+                    if player_choice == items.name:
+                        choose = items
+                    elif player_choice != items.name and count == len(character.inventory):
+                        print("There are no such item in your inventory")
+                if choose != None:
+                    use_item(character, choose)
+                    break
+                else:
+                    continue     
             else:
-                items.number += 1
-        for items in list_of_item:
-            print(f"{items.name.title()} × {items.number}")
-            items.number = 0
-        while True:
-            player_choice = input("I want to use: ")
+                print("There are no item in your inventory")
+                break
             
-    else:
-        pass
+        else:
+            try:
+                cpu_choice = random.choice(character.inventory)
+            except:
+                break
+            else:
+                use_item(character, cpu_choice)
+                break
 
+
+def use_item(character,item):
+    if item.type == "health":
+        character.state.health += item.value
+        print(f"{character.name.title()} use {item.name.upper()} recover {item.value} health point")
+        if character.state.health > character.state.max_health:
+            character.state.health = character.state.max_health
+            print(f"Current health: {character.state.health}")
+        else:
+            print(f"Current health: {character.state.health}")
+    elif item.type == "all":
+        character.state.health += item.value
+        print(f"{character.name.title()} use {item.name.upper()} recover {item.value} health point")
+        if character.state.health > character.state.max_health:
+            character.state.health = character.state.max_health
+            print(f"Current health: {character.state.health}")
+        else:
+            print(f"Current health: {character.state.health}")
+        
     
-menu = {"game": {"move": move, "search": search, "check": check, "quit": quit_},
+menu = {"game": {"move": move, "search": search, "check": check, "item": choose_item,
+                 "quit": quit_},
         "move": {"forward": forward, "backward": backward, "right": right, "left": left}}
 
 
@@ -272,7 +323,10 @@ def player_choice(type_):
             print(f"- {choice}")
         player_selection = input("My decision is ").lower()
         if player_selection in menu[type_]:
-            menu[type_][player_selection]()
+            if player_selection == "item":
+                menu[type_][player_selection](player)
+            else:
+                menu[type_][player_selection]()
             if type_ != "game":
                 continue
             break
@@ -281,7 +335,8 @@ def player_choice(type_):
         else:
             print("That is not a option")
             continue
-use_item(player)
+
+
 print("Hit enter to return")
 while True:
     player_choice("game")
