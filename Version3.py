@@ -271,11 +271,8 @@ def choose_item(character):
                     use_item(character, choose)
                     break
                 else:
-                    continue     
-            else:
-                print("There are no item in your inventory")
-                break
-            
+                    print("There are no item in your inventory")
+                    break    
         else:
             try:
                 cpu_choice = random.choice(character.inventory)
