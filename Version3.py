@@ -259,6 +259,8 @@ def choose_item(character):
                 items.number = 0
             if len(character.inventory) != 0:
                 player_choice = input("I want to use: ").lower()
+                if player_choice == "":
+                    break
                 count = 0
                 choose = None
                 for items in character.inventory:
@@ -301,7 +303,8 @@ def use_item(character,item):
         else:
             print(f"Current health: {character.state.health}")
     character.inventory.remove(item)   
-    
+
+
 menu = {"game": {"move": move, "search": search, "check": check, "item": choose_item,
                  "quit": quit_},
         "move": {"forward": forward, "backward": backward, "right": right, "left": left}}
@@ -321,7 +324,10 @@ def player_choice(type_):
         player_selection = input("My decision is ").lower()
         if player_selection in menu[type_]:
             if player_selection == "item":
-                menu[type_][player_selection](player)
+                if len(player.inventory) > 0:
+                    menu[type_][player_selection](player)
+                else:
+                    print("There are no item in your inventory")
             else:
                 menu[type_][player_selection]()
             if type_ != "game":
