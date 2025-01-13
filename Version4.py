@@ -35,12 +35,13 @@ class State:
         
 class Map_:
     
-    def __init__(self, name, size, mob, boss):
+    def __init__(self, name, size, mob, boss, item_list):
         self.name = name
         self.size = size
         self.map_ = [[None for _ in range(self.size[1]+1)] for _ in range(self.size[0]+1)]
         self.mob = mob
         self.boss = boss
+        self.item_list = item_list
         
     def dect_border(self, coordinate):
         if coordinate[0] > self.size[0] or coordinate[1] > self.size[1]:
@@ -80,22 +81,26 @@ crazy_diamond = Items("crazy diamond", "A magical stone that restore all your st
 player_state = State(True, 20, 20, 10, 5)
 mob_state = State(False, 10, 10, 5, 1)
 spearer_state = State(False, 100, 100, 15, 10)
-starting_map = None
+servant = Character("Servant", False, [0,1], [], None, mob_state, [punch, kick, guard], False)
+spearer = Character("Kenneth", False, [1,1], [], None, spearer_state, [punch, kick, guard], True)
+starting_map = Map_("starting map", [2,2], servant, spearer, [healing_pill, crazy_diamond])
 player = Character("Emyia", True, [2, 2], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use], False)
-servant = Character("Servant", False, [0,1], [], starting_map, mob_state, [punch, kick, guard], False)
-spearer = Character("", False, [1,1], [], starting_map, spearer_state, [], True)
-list_ = [healing_pill, crazy_diamond]
-starting_map = Map_("starting map", [2,2], servant, spearer)
-player = Character("Emyia", True, [2, 2], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use], False)
-servant = Character("Servant", False, [0,1], [], starting_map, mob_state, [punch, kick, guard], False)
-spearer = Character("", False, [1,1], [], starting_map, spearer_state, [], True)
+joseph = {"name": "joseph", "encounter": False, "first_meet":"You have encounter with a 6 foot tall man with a regent hairtyle", 
+          "ask": "Need some help?", "introduce": "My name is Joseph",
+          "heal": "Joseph put hands on your shoulder, suddenly, all your wound get healed",
+          "wonder": ""
+          }
+print(f"{joseph['name']}")
 def move():
     player_choice("move")
 
 
 def search():
+    if player.position == [0,0]:
+        
+        print("You find a ")
     item_list = []
-    for item in list_:
+    for item in player.map_.item_list:
         for i in range(item.rarity):
             item_list.append(item)
     varrible = random.randint(0,1)
@@ -106,11 +111,11 @@ def search():
         print(item.description)
     else:
         if player.position != [1,1]:
-            print("You have encounter with an enemy")
+            print(f"You have encounter with {player.map_.mob.name}")
             fight(player.map_.mob)
         else:
             print("...")
-            pass
+            fight(player.map_.boss)
 
 
 def cpu(unit):
