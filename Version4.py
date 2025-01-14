@@ -84,38 +84,67 @@ spearer_state = State(False, 100, 100, 15, 10)
 servant = Character("Servant", False, [0,1], [], None, mob_state, [punch, kick, guard], False)
 spearer = Character("Kenneth", False, [1,1], [], None, spearer_state, [punch, kick, guard], True)
 starting_map = Map_("starting map", [2,2], servant, spearer, [healing_pill, crazy_diamond])
-player = Character("Emyia", True, [2, 2], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use], False)
+player = Character("Emyia", True, [0, 0], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use], False)
 joseph = {"name": "joseph", "encounter": False, "first_meet":"You have encounter with a 6 foot tall man with a regent hairtyle", 
-          "ask": "Need some help?", "introduce": "My name is Joseph",
+          "ask": "Need help for healing your state?", "introduce": "Hello! My name is Joseph",
           "heal": "Joseph put hands on your shoulder, suddenly, all your wound get healed",
-          "wonder": ""
+          "wonder": "It does not feels like sorcery, more like something that is close to magic",
+          "finish": "GREAT!! You can always find me when needed"
           }
-print(f"{joseph['name']}")
 def move():
     player_choice("move")
 
 
 def search():
     if player.position == [0,0]:
-        
-        print("You find a ")
-    item_list = []
-    for item in player.map_.item_list:
-        for i in range(item.rarity):
-            item_list.append(item)
-    varrible = random.randint(0,1)
-    if varrible == 1:
-        item = random.choice(item_list)
-        player.inventory.append(item)
-        print(f"You find a {item.name}")
-        print(item.description)
-    else:
-        if player.position != [1,1]:
-            print(f"You have encounter with {player.map_.mob.name}")
-            fight(player.map_.mob)
+        if joseph["encounter"]:
+            print(joseph["ask"])
+            player_choice = input("Y/N").lower()
+            if player_choice == "y":
+                print(joseph["heal"])
+                player.state.health = player.state.max_health
+                print("Hit ENTER to continue")
+                input(f"{player.name}: {joseph['wonder']}")
+                print(joseph["finish"])
+            else:
+                print(joseph["finish"])
         else:
-            print("...")
-            fight(player.map_.boss)
+            print(joseph["first_meet"])
+            input("Hit ENTER to continue")
+            print(joseph["introduce"])
+            input("Hit ENTER to continue")
+            print(joseph["ask"])
+            player_choice = input("Y/N").lower()
+            if player_choice == "y":
+                print(joseph["heal"])
+                player.state.health = player.state.max_health
+                print("Hit ENTER to continue")
+                input(f"{player.name}: {joseph['wonder']}")
+                print(joseph["finish"])
+                joseph["encounter"] = True
+            else:
+                print(joseph["finish"])
+                joseph["encounter"] = True
+    else:
+        if player.position == [1,1]:
+            pass
+        item_list = []
+        for item in player.map_.item_list:
+            for i in range(item.rarity):
+                item_list.append(item)
+        varrible = random.randint(0,1)
+        if varrible == 1:
+            item = random.choice(item_list)
+            player.inventory.append(item)
+            print(f"You find a {item.name}")
+            print(item.description)
+        else:
+            if player.position != [1,1]:
+                print(f"You have encounter with {player.map_.mob.name}")
+                fight(player.map_.mob)
+            else:
+                print("...")
+                fight(player.map_.boss)
 
 
 def cpu(unit):
@@ -333,10 +362,13 @@ def player_choice(type_):
     while True:
         for choice in menu[type_].keys():
             print(f"- {choice}")
+        if type_ == "move":
+            print("Hit enter to return")
         player_selection = input("My decision is ").lower()
         if player_selection in menu[type_]:
             if player_selection == "item":
                 if len(player.inventory) > 0:
+                    print("Hit enter to return")
                     menu[type_][player_selection](player)
                 else:
                     print("There are no item in your inventory")
@@ -352,6 +384,5 @@ def player_choice(type_):
             continue
 
 
-print("Hit enter to return")
 while True:
     player_choice("game")
