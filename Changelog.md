@@ -27,3 +27,11 @@ Version 3
   - compare the piroity between move and the speed state of player and emey to decide who go first
   - the fight only continue when both player and enenmy health is > than 0, if not into fight concluding
   - if player lost player will lost all the item and revive at potint [0,0]
+  - add use item as a move so player able to use item during fight
+  - add use item as a choice in main menu so player able to use item outdise of fight
+  - recover player state by the value of the item, is over the max point player remove the extra part that is over.
+
+Version 4
+  - creat new character spearer name kenneth as boss of the starting map
+  - use dictionery creat a npc Joseph at [0,0] heal he player when player use search functin at point [0,0]
+  - 
