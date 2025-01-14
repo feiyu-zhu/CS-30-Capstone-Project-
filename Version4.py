@@ -80,11 +80,11 @@ healing_pill = Items("healing pill", "A pill that heal you for a small amount", 
 crazy_diamond = Items("crazy diamond", "A magical stone that restore all your state", "all", 999, 0, 1)
 player_state = State(True, 20, 20, 10, 5)
 mob_state = State(False, 10, 10, 5, 1)
-spearer_state = State(False, 100, 100, 15, 10)
+spearer_state = State(False, 100, 100, 15, 20)
 servant = Character("Servant", False, [0,1], [], None, mob_state, [punch, kick, guard], False)
 spearer = Character("Kenneth", False, [1,1], [], None, spearer_state, [punch, kick, guard], True)
 starting_map = Map_("starting map", [2,2], servant, spearer, [healing_pill, crazy_diamond])
-player = Character("Emyia", True, [0, 0], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use], False)
+player = Character("Emyia", True, [1, 1], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use], False)
 joseph = {"name": "joseph", "encounter": False, "first_meet":"You have encounter with a 6 foot tall man with a regent hairtyle", 
           "ask": "Need help for healing your state?", "introduce": "Hello! My name is Joseph",
           "heal": "Joseph put hands on your shoulder, suddenly, all your wound get healed",
@@ -127,24 +127,26 @@ def search():
                 joseph["encounter"] = True
     else:
         if player.position == [1,1]:
-            pass
-        item_list = []
-        for item in player.map_.item_list:
-            for i in range(item.rarity):
-                item_list.append(item)
-        varrible = random.randint(0,1)
-        if varrible == 1:
-            item = random.choice(item_list)
-            player.inventory.append(item)
-            print(f"You find a {item.name}")
-            print(item.description)
+            print(f"Encounter with boss {player.map_.boss.name}")
+            player_choice = input("Continue Y/N").lower()
+            if player_choice == "y":
+                fight(player.map_.boss)
+            else:
+                print("You walk away")
         else:
-            if player.position != [1,1]:
+            item_list = []
+            for item in player.map_.item_list:
+                for i in range(item.rarity):
+                    item_list.append(item)
+            varrible = random.randint(0,1)
+            if varrible == 1:
+                item = random.choice(item_list)
+                player.inventory.append(item)
+                print(f"You find a {item.name}")
+                print(item.description)
+            else:
                 print(f"You have encounter with {player.map_.mob.name}")
                 fight(player.map_.mob)
-            else:
-                print("...")
-                fight(player.map_.boss)
 
 
 def cpu(unit):
