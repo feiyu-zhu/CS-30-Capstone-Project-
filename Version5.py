@@ -80,7 +80,7 @@ healing_pill = Items("healing pill", "A pill that heal you for a small amount", 
 crazy_diamond = Items("crazy diamond", "A magical stone that restore all your state", "all", 999, 0, 1)
 player_state = State(True, 20, 20, 10, 5)
 mob_state = State(False, 10, 10, 5, 1)
-spearer_state = State(False, 100, 100, 15, 20)
+spearer_state = State(False, 30, 30, 10, 10)
 servant = Character("Servant", False, [0,1], [], None, mob_state, [punch, kick, guard], False)
 spearer = Character("Kenneth", False, [1,1], [], None, spearer_state, [punch, kick, guard], True)
 starting_map = Map_("starting map", [2,2], servant, spearer, [healing_pill, crazy_diamond])
@@ -209,13 +209,14 @@ def fight_calcu(first, first_move, second, second_move):
         if second_move.value >= first_move.value:
             damage = second_move.value
             first.state.health -= damage
+            print(f"{second.name.upper()}'s attack is too strong")
             print(f"{first.name.upper()} take {damage} damage")
             if second.state.health <= 0:
                 print(f"{first.name.upper()} current health is 0")
             else:
                 print(f"{first.name.upper()} current health is {first.state.health}")
         else:
-            print(f"{first.name.upper()} guard the attact")
+            print(f"{first.name.upper()} guard {second_move.name.title()}")
     elif first_move.type == "attack":
         damage = round(first_move.value * (first.state.damage/10 + 1))
         second.state.health -= damage
@@ -228,7 +229,7 @@ def fight_calcu(first, first_move, second, second_move):
             if second_move.type == "guard":
                 print(f"{second.name.upper()} is too slow on guard")
             elif second_move.type == "attack":
-                damage = round(second_move.value * (second.state.damage/100 + 1))
+                damage = round(second_move.value * (second.state.damage/10 + 1))
                 first.state.health -= damage
                 print(f"{second.name.upper()} used {second_move.name.title()}")
                 print(f"{first.name.upper()} take {damage} damage")
