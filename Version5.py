@@ -2,7 +2,7 @@ from tabulate import tabulate
 import random
 class Character:
     
-    def __init__(self, name, player, position, inventory, map_, state, move_list, boss):
+    def __init__(self, name, player, position, inventory, map_, state, move_list, boss, story_line):
         self.name = name
         self.player = player
         self.position = position
@@ -11,7 +11,8 @@ class Character:
         self.state = state
         self.move_list = move_list
         self.boss = boss
-    
+        self.story_line = story_line
+
     def check_inventory(self):
         print("-----Item Own-----")
         list_of_item = []
@@ -81,16 +82,25 @@ crazy_diamond = Items("crazy diamond", "A magical stone that restore all your st
 player_state = State(True, 20, 20, 10, 5)
 mob_state = State(False, 10, 10, 5, 1)
 spearer_state = State(False, 30, 30, 10, 10)
-servant = Character("Servant", False, [0,1], [], None, mob_state, [punch, kick, guard], False)
-spearer = Character("Kenneth", False, [1,1], [], None, spearer_state, [punch, kick, guard], True)
+servant = Character("Servant", False, [0,1], [], None, mob_state, [punch, kick, guard], False, None)
+spearer = Character("Kenneth", False, [1,1], [], None, spearer_state, [punch, kick, guard], True, None)
 starting_map = Map_("starting map", [2,2], servant, spearer, [healing_pill, crazy_diamond])
-player = Character("Emyia", True, [1, 1], [healing_pill], starting_map, player_state, [punch, kick, guard, god_requiem, item_use], False)
+player = Character("Emyia", True, [1, 1], [healing_pill], starting_map, player_state,
+                   [punch, kick, guard, god_requiem, item_use], False, [0,0])
 joseph = {"name": "joseph", "encounter": False, "first_meet":"You have encounter with a 6 foot tall man with a regent hairtyle", 
           "ask": "Need help for healing your state?", "introduce": "Hello! My name is Joseph",
           "heal": "Joseph put hands on your shoulder, suddenly, all your wound get healed",
           "wonder": "It does not feels like sorcery, more like something that is close to magic",
           "finish": "GREAT!! You can always find me when needed"
           }
+story_line = [[["How long is it since the last time I dreamed about this; The scene of hell"],
+               ["A young boy; Walking on the ruins of the city"], ["The smeel of blood, the scream that calls for help"],
+               ["Is it because he is already numb to the things surround?..."],
+               ["or he just try to ignore; Since he doesn't even have enough power to save himself"],
+               []],
+              [["..."],["..."]]
+              ]
+
 def move():
     player_choice("move")
 
@@ -389,5 +399,3 @@ def player_choice(type_):
 
 while True:
     player_choice("game")
-
-
