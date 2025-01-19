@@ -34,4 +34,8 @@ Version 3
 Version 4
   - creat new character spearer name kenneth as boss of the starting map
   - use dictionery creat a npc Joseph at [0,0] heal he player when player use search functin at point [0,0]
-  - 
+
+Version 5
+  - add story telling by use list
+  - creat weapon class(name,description,type, move list)
+  - now character move depend on weapon move list
